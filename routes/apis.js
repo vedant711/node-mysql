@@ -41,10 +41,12 @@ router.post('/create',(req,res)=>{
             if (err) res.status(400).json('Bad Request');
             con.query(`select * from employees where name='${name}';`,(err,result,fields)=>{
                 if (result.length === 0) {
-                    con.query(`insert into employees (name,password,mobile,email,admin) values ('${name}','${hash}',${mobile},'${email}',${false})`,(err,result)=>{
-                        if (err) {res.status(400).json('Bad Request');throw err; }
-                        else res.status(200).json('User added successfully')
-                    });
+                    if (mobile.length===10 && email.includes('@') && password.length===8) {
+                        con.query(`insert into employees (name,password,mobile,email,admin) values ('${name}','${hash}',${mobile},'${email}',${false})`,(err,result)=>{
+                            if (err) {res.status(400).json('Bad Request');throw err; }
+                            else res.status(200).json('User added successfully')
+                        });
+                    } else res.status(200).json('Invalid Input')  
                 } else res.status(200).json('User already exists')
             })
         })
@@ -157,10 +159,12 @@ router.post('/create-superuser',(req,res)=>{
                         if (err) res.status(400).json('Bad Request');
                         con.query(`select * from employees where name='${name}';`,(err,result,fields)=>{
                             if (result.length === 0) {
-                                con.query(`insert into employees (name,password,mobile,email,admin) values ('${name}','${hash}',${mobile},'${email}',${true})`,(err,result)=>{
-                                    if (err) {res.status(400).json('Bad Request');throw err; }
-                                    else res.status(200).json('User added successfully')
-                                });
+                                if (mobile.length===10 && email.includes('@') && password.length===8) {
+                                    con.query(`insert into employees (name,password,mobile,email,admin) values ('${name}','${hash}',${mobile},'${email}',${true})`,(err,result)=>{
+                                        if (err) {res.status(400).json('Bad Request');throw err; }
+                                        else res.status(200).json('User added successfully')
+                                    });
+                            } else res.status(200).json('Invalid Input')
                             } else res.status(200).json('User already exists')
                         })
                     })
