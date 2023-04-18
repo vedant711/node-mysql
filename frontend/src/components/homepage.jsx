@@ -73,7 +73,7 @@ const Home = () => {
         const email = e.target.email.value;
         const mobile = e.target.mobile.value;
         axios.post(`http://localhost:55356/create-superuser`,{'name':name,'password':password,'mobile':mobile,'email':email,'token':cookie}).then(res=>{
-            setShowCreateRoot(false)
+            if (res.data !== 'Invalid Input' || res.data !== 'User already exists') setShowCreateRoot(false)
             setResponse(res.data)
             setTimeout(()=>setResponse(''),5000)
         });
