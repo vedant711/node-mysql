@@ -19,6 +19,8 @@ export const AuthProvider = ({ children }) => {
         : null
     );
     const [loading, setLoading] = useState(true);
+
+    const [serverResponse, setServerResponse] = useState('')
   
     const navigate = useNavigate();
   
@@ -68,8 +70,13 @@ export const AuthProvider = ({ children }) => {
     const registerUser = async(name,password,mobile,email) => {
         await axios.post('http://localhost:55356/create',{'name':name,'password':password,'mobile':mobile,'email':email}).then(res=>{
             console.log(res);
+            if (res.data==='User added successfully') navigate('/')
+            else {
+              setServerResponse(res.data)
+              setTimeout(()=>setServerResponse(''),5000)
+            }
         })
-        navigate('/')
+        
     }
     const contextData = {
         user,
@@ -78,7 +85,9 @@ export const AuthProvider = ({ children }) => {
         setAuthTokens,
         registerUser,
         loginUser,
-        logoutUser
+        logoutUser,
+        serverResponse,
+        setServerResponse,
       };
     
       useEffect(() => {

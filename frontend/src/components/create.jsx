@@ -2,7 +2,7 @@ import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
 const Create =() => {
-    const { registerUser } = useContext(AuthContext);
+    const { registerUser,serverResponse } = useContext(AuthContext);
     const handleSubmit = e => {
         e.preventDefault();
         const name = e.target.name.value;
@@ -14,6 +14,7 @@ const Create =() => {
       };
     return(
         <form onSubmit={handleSubmit} className="container">
+          {serverResponse!==''?<p>{serverResponse}</p>:null}
         <h1>Create </h1>
         <hr />
         {/* <label htmlFor="name">Username</label> */}

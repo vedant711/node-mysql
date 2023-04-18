@@ -14,7 +14,7 @@ const Home = () => {
     const [response,setResponse] = useState('')
     const navigate = useNavigate();
     const cookie = localStorage.getItem('authTokens')
-    console.log(cookie)
+    // console.log(cookie)
     const handleSubmitEditName = async (e) => {
         e.preventDefault();
         const name = e.target.editname.value;
@@ -73,7 +73,7 @@ const Home = () => {
         const email = e.target.email.value;
         const mobile = e.target.mobile.value;
         axios.post(`http://localhost:55356/create-superuser`,{'name':name,'password':password,'mobile':mobile,'email':email,'token':cookie}).then(res=>{
-            if (res.data !== 'Invalid Input' || res.data !== 'User already exists') setShowCreateRoot(false)
+            if (res.data !== 'Invalid Input' && res.data !== 'User already exists' && res.data !=='Invalid Mobile Number') setShowCreateRoot(false)
             setResponse(res.data)
             setTimeout(()=>setResponse(''),5000)
         });
