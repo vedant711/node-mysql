@@ -60,12 +60,12 @@ router.get('/admin/:token',(req,res)=>{
                 console.log(err)
             } else if (decoded.admin===1) {
                 con.query(`select * from employees`,(err,result,fields)=>{
-                    if (err) {res.status(400).json('Bad Request'); throw err}
-                    res.status(200).json(result)
+                    if (err) {res.status(400).json({message:'Bad Request'}); throw err}
+                    res.status(200).json({res:result,message:'successful'})
                 })
-            } else res.status(403).json('Forbidden')
+            } else res.status(403).json({message:'Forbidden'})
         })
-    } else res.status(403).json('Forbidden')
+    } else res.status(403).json({message:'Forbidden'})
 })
 
 router.post('/editname/:id',(req,res)=>{
@@ -84,7 +84,7 @@ router.post('/editname/:id',(req,res)=>{
                             if (result.length === 0) {
                                 con.query(`update employees set name='${name}' where id=${req.params.id};`,(err,result1)=>{
                                     if (err) {res.status(400).json('Bad Request');throw err;}
-                                    res.status(200).json('User updated successfully')
+                                    con.query(`select * from employees where id=${req.params.id} order by id asc limit 1;`,(err,new_user,fields)=>{res.status(200).json({message:'User updated successfully',token:generateToken(new_user[0])})})
                                 })
                             } else res.status(200).json('Username already taken')
                         })
